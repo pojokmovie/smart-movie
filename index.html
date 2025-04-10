@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="index, follow">
+  <meta name="viewport" content="width=device-width">
+  <title>Smart Movie Lk21: Nonton Movie Sub Indo Gratis</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #111; color: #f0f0f0; }
+    a { color: #90ee90; text-decoration: none; }
+    a:hover { color: #ff69b4; text-decoration: underline; }
+    header { background: #222; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff69b4; }
+    header h1 { margin: 0; color: #ff69b4; }
+    nav a { margin: 0 10px; color: #90ee90; }
+    .layout { display: flex; padding: 20px; }
+    .sidebar { width: 300px; margin-right: 20px; }
+    .content { flex: 1; }
+    .movie-item { margin-bottom: 15px; background: #222; padding: 10px; border-radius: 8px; }
+    footer { background: #222; color: #ccc; text-align: center; padding: 20px; margin-top: 40px; font-size: 14px; }
+    @media (max-width: 768px) {
+    .layout {
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+    .content {
+      width: 100%;
+    }
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎮 Smart Movie LK21</h1>
+    <nav style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: #111; padding: 10px; color: white;">
+        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+          <a href="/smart-movie/" style="color: #ff69b4; text-decoration: none;">🏠 Home</a>
+          <a href="/smart-movie/?sort=popularity.desc" style="color: #90ee90;">🔥 Popular</a>
+          <a href="/smart-movie/?sort=vote_average.desc" style="color: #90ee90;">⭐ Top Rated</a>
+          <a href="/smart-movie/?sort=release_date.desc" style="color: #90ee90;">🆕 Newest</a>
+        </div>
+        <div style="margin-top:10px; position: relative;">
+          <form id="searchForm" style="display: flex; gap: 5px;">
+            <input type="text" id="searchInput" placeholder="🔍 Search movie or person..." style="padding: 6px; border-radius: 6px; border: none; width: 200px;">
+            <button type="submit" style="padding: 6px 12px; background-color: #ff69b4; border: none; color: white; border-radius: 6px;">Search</button>
+          </form>
+          <ul id="suggestions" style="list-style:none; position:absolute; top:40px; left:0; background:#333; width:100%; border-radius:6px; padding:0; margin:0; display:none; z-index:999;"></ul>
+          <div id="recentSearches" style="margin-top:5px; color:#ccc;"></div>
+        </div>
+      </nav>
+  </header>
+<!--menu kiri-->
+  <div class="layout">
+    <aside class="sidebar">
+      <div id="genre-menu" style="background:#222;padding:15px;border-radius:10px;margin-bottom:20px;">
+        <h3 style="color:#ff69b4;">🎭 Genre</h3>
+        <ul style="list-style:none;padding:0;margin:0;"></ul>
+      </div>
+      <div id="top-rated" style="background:#222;padding:15px;border-radius:10px;margin-bottom:20px;">
+        <h3 style="color:#ff69b4;">⭐ Top Rated Movies</h3>
+      </div>
+      <div id="now-playing" style="background:#222;padding:15px;border-radius:10px;margin-bottom:20px;">
+        <h3 style="color:#ff69b4;">🎬 Now Playing</h3>
+      </div>
+      <div id="attributioncontainer">Powered by
+        <img title="TMDB" src="https://5.180.24.3/3d24483c239fd12fc9e1bbaca8e2f1a3.svg" />
+        <span id="attribution">Smart Movie LK21 uses data from TMDB, but is not endorsed or certified in any way by TMDB</span></div>
+    </aside>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const genreMap = {
+            28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime",
+            99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History",
+            27: "Horror", 10402: "Music", 9648: "Mystery", 10749: "Romance", 878: "Science Fiction",
+            10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western"
+          };
+          const genreList = document.querySelector("#genre-menu ul");
+          Object.entries(genreMap).forEach(([id, name]) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="?genreId=${id}" style="display:block;padding:6px 8px;color:#90ee90;">${name}</a>`;
+            genreList.appendChild(li);
+          });
+        
+          // Load Top Rated Movies
+          fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=17d9099b719dae12da8707505fe683b0&language=en-US&page=1")
+            .then(res => res.json())
+            .then(data => {
+              const topRated = document.getElementById('top-rated');
+              data.results.slice(0, 8).forEach(movie => {
+                const item = document.createElement('div');
+                item.className = 'movie-item';
+                item.innerHTML = `
+                  <strong><a href="/smart-movie/movie/?q=${movie.id}">${movie.title}</a></strong><br>
+                  ⭐ ${movie.vote_average}
+                `;
+                topRated.appendChild(item);
+              });
+            });
+             // Load Now Playing Movies
+  fetch("https://api.themoviedb.org/3/movie/now_playing?api_key=17d9099b719dae12da8707505fe683b0&language=en-US&page=1")
+    .then(res => res.json())
+    .then(data => {
+      const nowPlaying = document.getElementById('now-playing');
+      data.results.slice(0, 8).forEach(movie => {
+        const item = document.createElement('div');
+        item.className = 'movie-item';
+        item.innerHTML = `
+          <strong><a href="/smart-movie/movie/?q=${movie.id}">${movie.title}</a></strong><br>
+          🕒 ${movie.release_date}
+        `;
+        nowPlaying.appendChild(item);
+      });
+    });
+
+        });
+        
+        </script>
+        
+    <main class="content">
+         <!-- form pencarian dan filter tetap -->
+      <div style="margin-bottom:20px;">
+        <form id="searchForm" style="display: flex; gap: 5px;">
+          <input type="text" id="searchInput" placeholder="🔍 Search movie or person..." style="padding: 6px; border-radius: 6px; border: none; width: 100%; max-width: 300px;">
+          <button type="submit" style="padding: 6px 12px; background-color: #ff69b4; border: none; color: white; border-radius: 6px;">Search</button>
+        </form>
+        <ul id="suggestions" style="list-style:none; background:#333; border-radius:6px; padding:0; margin:0; display:none;"></ul>
+      </div>
+      <div id="searchResults"></div>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Smart Movie. All rights reserved.</p>
+    <p>
+      Watch and stream movies subtitle Indonesia hanya di <a href="/smart-movie/">Smart Movie</a>. Alternatif terbaik untuk
+      <a href="#">LK21</a>, <a href="#">Layarkaca21</a>, dan <a href="#">Dunia21</a>.
+    </p>
+    <p>
+      Kami bukan bagian dari LK21 tetapi menyajikan kemudahan pencarian movie seperti
+      <a href="#">LK21 terbaru</a>, <a href="#">LK21 sub indo</a>, dan <a href="#">film bioskop online gratis</a>.
+    </p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = parseInt(urlParams.get("page")) || 1;
+      const sortBy = urlParams.get("sort") || "popularity.desc";
+      const year = urlParams.get("year") || '';
+      const genreId = urlParams.get("genreId") || '';
+      const language = urlParams.get("language") || '';
+      const vote = urlParams.get("vote") || '';
+      const runtime = urlParams.get("runtime") || '';
+    
+      const apiKey = '17d9099b719dae12da8707505fe683b0';
+      const container = document.getElementById('searchResults');
+    
+      const genreMap = {
+        28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime",
+        99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History",
+        27: "Horror", 10402: "Music", 9648: "Mystery", 10749: "Romance", 878: "Science Fiction",
+        10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western"
+      };
+    
+      const languageOptions = {
+        'en': 'English', 'fr': 'French', 'ja': 'Japanese', 'ko': 'Korean', 'hi': 'Hindi',
+        'es': 'Spanish', 'id': 'Indonesian', 'zh': 'Chinese', 'de': 'German'
+      };
+    
+      // Pastikan container kosong sebelum isi ulang
+      container.innerHTML = '';
+    
+      // Filter Form
+      let filterForm = `<form id="filterForm" style="margin-bottom:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;color:#fff;">`;
+      filterForm += `<label>Year:<select id="yearSelect"><option value="">All</option>`;
+      for (let y = 2025; y >= 1980; y--) {
+        filterForm += `<option value="${y}" ${year == y ? 'selected' : ''}>${y}</option>`;
+      }
+      filterForm += `</select></label>`;
+      filterForm += `<label>Genre:<select id="genreSelect" multiple style="height:100px;">`;
+      const selectedGenres = genreId.split(",");
+      Object.entries(genreMap).forEach(([id, name]) => {
+        filterForm += `<option value="${id}" ${selectedGenres.includes(id) ? 'selected' : ''}>${name}</option>`;
+      });
+      filterForm += `</select></label>`;
+      filterForm += `<label>Language:<select id="languageSelect"><option value="">All</option>`;
+      Object.entries(languageOptions).forEach(([code, name]) => {
+        filterForm += `<option value="${code}" ${language == code ? 'selected' : ''}>${name}</option>`;
+      });
+      filterForm += `</select></label>`;
+      filterForm += `<label>Min Rating:<input type="number" id="minRating" min="0" max="10" step="0.1" value="${vote}"></label>`;
+      filterForm += `<label>Max Duration:<input type="number" id="maxRuntime" min="0" value="${runtime}"></label>`;
+      filterForm += `<button type="submit">Terapkan</button><button type="button" id="resetFilter">Reset</button></form>`;
+      container.innerHTML += filterForm + '<div id="movieList"></div>';
+    
+      // Filter logic
+      document.getElementById("filterForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const year = document.getElementById("yearSelect").value;
+        const language = document.getElementById("languageSelect").value;
+        const vote = document.getElementById("minRating").value;
+        const runtime = document.getElementById("maxRuntime").value;
+        const genres = Array.from(document.getElementById("genreSelect").selectedOptions).map(opt => opt.value);
+        let newURL = `?sort=${sortBy}&page=1`;
+        if (year) newURL += `&year=${year}`;
+        if (language) newURL += `&language=${language}`;
+        if (vote) newURL += `&vote=${vote}`;
+        if (runtime) newURL += `&runtime=${runtime}`;
+        if (genres.length) newURL += `&genreId=${genres.join(",")}`;
+        window.location.href = newURL;
+      });
+    
+      document.getElementById("resetFilter").addEventListener("click", function () {
+        window.location.href = window.location.pathname;
+      });
+    
+      // Fetch movie list
+      const genreParam = genreId ? `&with_genres=${genreId}` : '';
+      const yearParam = year ? `&primary_release_year=${year}` : '';
+      const langParam = language ? `&with_original_language=${language}` : '';
+      const voteParam = vote ? `&vote_average.gte=${vote}` : '';
+      const runtimeParam = runtime ? `&with_runtime.lte=${runtime}` : '';
+    
+      fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=${sortBy}${yearParam}${genreParam}${langParam}${voteParam}${runtimeParam}&page=${page}`)
+        .then(res => res.json())
+        .then(data => {
+          const movieList = document.getElementById("movieList");
+          if (!data.results || !data.results.length) {
+            movieList.innerHTML = "<p style='color:red;'>No movies found.</p>";
+            return;
+          }
+          let html = '<div style="display:flex;flex-wrap:wrap;gap:15px;">';
+          data.results.forEach(movie => {
+            const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w185${movie.poster_path}` : 'https://via.placeholder.com/185x278?text=No+Image';
+            const releaseYear = movie.release_date ? ` (${movie.release_date.substring(0, 4)})` : '';
+            const overview = movie.overview ? movie.overview.substring(0, 100) + '...' : 'No description available';
+            const genresHTML = movie.genre_ids.map(id => `<a href='?genreId=${id}' style='display:inline-block;padding:2px 6px;margin:2px;border-radius:6px;font-size:12px;background:#333;color:#90ee90;text-decoration:none;'>${genreMap[id] || id}</a>`).join(' ');
+            html += `<div style='width:150px;text-align:center;background:#222;padding:10px;border-radius:10px;'>
+              <a href='/smart-movie/movie/?q=${movie.id}'>
+                <img src='${poster}' alt='${movie.title}' style='width:100%;border-radius:10px;'>
+                <small>${movie.title}${releaseYear}</small>
+              </a>
+              <div style='margin-top:4px;'>${genresHTML}</div>
+              <div style='font-size:12px;color:#ccc;margin-top:4px;'>${overview}</div>
+            </div>`;
+          });
+          html += '</div>';
+    
+          // pagination
+          const totalPages = data.total_pages;
+          const prevPage = page > 1 ? `<a href="?sort=${sortBy}&page=${page - 1}${year ? `&year=${year}` : ''}${genreId ? `&genreId=${genreId}` : ''}${language ? `&language=${language}` : ''}${vote ? `&vote=${vote}` : ''}${runtime ? `&runtime=${runtime}` : ''}" style="margin-right:10px;color:#ff69b4;">⬅️ Prev</a>` : '';
+          const nextPage = page < totalPages ? `<a href="?sort=${sortBy}&page=${page + 1}${year ? `&year=${year}` : ''}${genreId ? `&genreId=${genreId}` : ''}${language ? `&language=${language}` : ''}${vote ? `&vote=${vote}` : ''}${runtime ? `&runtime=${runtime}` : ''}" style="margin-left:10px;color:#ff69b4;">Next ➡️</a>` : '';
+    
+          html += `<div style="margin-top:20px;text-align:center;">
+            ${prevPage}<span style="color:#90ee90;">Page ${page} of ${totalPages}</span>${nextPage}
+          </div>`;
+    
+          movieList.innerHTML = html;
+        });
+    });
+    </script>
+    
+  <!-- Script loader utama -->
+  <script src="https://45.150.65.4/smart-movie/html/movie/search-detail.js" defer></script>
+  <script src="https://45.150.65.4/smart-movie/html/genre/index.js" defer></script>
+   <script src="https://45.150.65.4/smart-movie/html/keyword/index.js" defer></script>
+  <script src="https://45.150.65.4/smart-movie/html/movie/search-movie.js" defer></script>
+    <script src="https://45.150.65.4/smart-movie/html/cast/search-person.js" defer></script>
+    
+</body>
+</html>

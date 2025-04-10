@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://45.150.65.4/smart-movie/sitemap.xml
