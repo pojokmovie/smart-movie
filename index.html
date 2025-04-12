@@ -1,40 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Link Acak dari TXT (Tanpa Proxy)</title>
-</head>
-<body>
-  <h2>Link Random</h2>
-  <div id="randomLink">Loading...</div>
-
-  <script>
-    fetch('https://pojokmovie.github.io/smart-movie/urls.txt') // Ganti ke URL file TXT kamu
-      .then(response => {
-        if (!response.ok) throw new Error("CORS error atau file tidak ditemukan");
-        return response.text();
-      })
-      .then(data => {
-        const urls = data
-          .split('\n')
-          .map(url => url.trim())
-          .filter(url => url.length > 0);
-
-        if (urls.length > 0) {
-          const randomUrl = urls[Math.floor(Math.random() * urls.length)];
-          const link = document.createElement('a');
-          link.href = randomUrl;
-          link.textContent = randomUrl;
-          link.target = '_blank';
-          document.getElementById('randomLink').innerHTML = '';
-          document.getElementById('randomLink').appendChild(link);
-        } else {
-          document.getElementById('randomLink').textContent = 'Tidak ada URL yang ditemukan.';
-        }
-      })
-      .catch(error => {
-        document.getElementById('randomLink').textContent = 'Gagal memuat URL: ' + error.message;
-      });
-  </script>
-</body>
-</html>
+<script>
+fetch('https://pojokmovie.github.io/smart-movie/urls.txt')
+.then(r=>r.text())
+.then(t=>{
+let u=t.split('\n').map(x=>x.trim()).filter(x=>x);
+if(u.length){
+let l=document.createElement('a');
+l.href=l.textContent=u[Math.floor(Math.random()*u.length)];
+l.target='_blank';
+document.getElementById('randomLink').innerHTML='';
+document.getElementById('randomLink').appendChild(l);
+}else{
+document.getElementById('randomLink').textContent='Tidak ada URL.';
+}})
+.catch(e=>{
+document.getElementById('randomLink').textContent='Gagal: '+e.message;
+});
+</script>
