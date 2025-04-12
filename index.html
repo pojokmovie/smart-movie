@@ -2,34 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Daftar URL dari TXT</title>
+  <title>Link Acak dari TXT (Tanpa Proxy)</title>
 </head>
 <body>
-  <h1>Daftar URL</h1>
-  <div id="urlContainer">Loading...</div>
+  <h2>Link Random</h2>
+  <div id="randomLink">Loading...</div>
 
   <script>
-    fetch('http://45.150.65.4/urls.txt')
-      .then(response => response.text())
-      .then(data => {
-        const container = document.getElementById('urlContainer');
-        container.innerHTML = ''; // Bersihkan "Loading..."
-
-        const urls = data.split('\n');
-        urls.forEach(url => {
-          url = url.trim();
-          if (url) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.textContent = url;
-            link.target = '_blank';
-            container.appendChild(link);
-            container.appendChild(document.createElement('br'));
-          }
-        });
+    fetch('https://pojokmovie.github.io/smart-movie/urls.txt') // Ganti ke URL file TXT kamu
+      .then(response => {
+        if (!response.ok) throw new Error("CORS error atau file tidak ditemukan");
+        return response.text();
       })
-      .catch(err => {
-        document.getElementById('urlContainer').textContent = 'Gagal memuat URL: ' + err;
+      .then(data => {
+        const urls = data
+          .split('\n')
+          .map(url => url.trim())
+          .filter(url => url.length > 0);
+
+        if (urls.length > 0) {
+          const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+          const link = document.createElement('a');
+          link.href = randomUrl;
+          link.textContent = randomUrl;
+          link.target = '_blank';
+          document.getElementById('randomLink').innerHTML = '';
+          document.getElementById('randomLink').appendChild(link);
+        } else {
+          document.getElementById('randomLink').textContent = 'Tidak ada URL yang ditemukan.';
+        }
+      })
+      .catch(error => {
+        document.getElementById('randomLink').textContent = 'Gagal memuat URL: ' + error.message;
       });
   </script>
 </body>
