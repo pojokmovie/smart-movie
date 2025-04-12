@@ -1,0 +1,3 @@
+https://google.com
+https://chat.openai.com
+https://github.com
